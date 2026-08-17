@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/find-overseas-b2b-buyers/batch.schema.json",
+  "title": "Lead Research Batch",
+  "type": "object",
+  "required": ["batch_id", "task_id", "brief_id", "stage", "qualified", "needs_review", "excluded", "summary"],
+  "properties": {
+    "batch_id": {"type": "string"},
+    "task_id": {"type": "string"},
+    "brief_id": {"type": "string"},
+    "stage": {"enum": ["sample", "full"]},
+    "qualified": {"type": "array", "items": {"$ref": "lead.schema.json"}},
+    "needs_review": {"type": "array", "items": {"$ref": "lead.schema.json"}},
+    "excluded": {"type": "array", "items": {"type": "object", "required": ["company_name", "reason", "evidence_url"], "properties": {"company_name": {"type": "string"}, "website": {"type": ["string", "null"]}, "reason": {"type": "string"}, "rule": {"type": ["string", "null"]}, "evidence_url": {"type": "string"}}}},
+    "queries": {"type": "array", "items": {"type": "object"}},
+    "summary": {"type": "object", "required": ["researched_count", "qualified_count", "review_count", "excluded_count"], "properties": {"researched_count": {"type": "integer", "minimum": 0}, "qualified_count": {"type": "integer", "minimum": 0}, "review_count": {"type": "integer", "minimum": 0}, "excluded_count": {"type": "integer", "minimum": 0}, "contact_coverage": {"type": "number", "minimum": 0, "maximum": 1}, "limitations": {"type": "array", "items": {"type": "string"}}}}
+  },
+  "additionalProperties": true
+}

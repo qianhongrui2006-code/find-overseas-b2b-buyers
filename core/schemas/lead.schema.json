@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/find-overseas-b2b-buyers/lead.schema.json",
+  "title": "Evidence-backed B2B Lead",
+  "type": "object",
+  "required": ["lead_id", "company_name", "website", "normalized_domain", "country", "company_type", "match_reason", "evidence", "discovery_source", "retrieved_at", "review_status"],
+  "properties": {
+    "lead_id": {"type": "string"},
+    "company_name": {"type": "string", "minLength": 1},
+    "company_name_zh": {"type": ["string", "null"]},
+    "website": {"type": "string", "format": "uri"},
+    "normalized_domain": {"type": "string", "pattern": "^[^/\\s]+$"},
+    "country": {"type": "string"},
+    "city": {"type": ["string", "null"]},
+    "address": {"type": ["string", "null"]},
+    "company_type": {"type": "string"},
+    "product_match": {"enum": ["high", "medium", "low", "unverified"]},
+    "product_relationship": {"enum": ["exact_target", "direct_use", "adjacent_with_transaction_bridge", "adjacent_only", "unrelated", "unknown"]},
+    "target_product_purchase_pathway": {"type": ["string", "null"]},
+    "target_product_evidence_url": {"type": ["string", "null"], "format": "uri"},
+    "matched_products_or_brands": {"type": "array", "items": {"type": "string"}},
+    "match_reason": {"type": "string", "minLength": 1},
+    "demand_signals": {"type": "array", "items": {"type": "string"}},
+    "purchase_intent_level": {"enum": ["strong", "medium", "weak", "unknown"]},
+    "intent_evidence": {"type": "array", "items": {"type": "string"}},
+    "intent_evidence_date": {"type": ["string", "null"], "format": "date"},
+    "intent_evidence_url": {"type": ["string", "null"], "format": "uri"},
+    "scale_signals": {"type": "array", "items": {"type": "string"}},
+    "evidence": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["claim", "url", "source_type", "retrieved_at"], "properties": {"claim": {"type": "string"}, "url": {"type": "string", "format": "uri"}, "source_type": {"type": "string"}, "retrieved_at": {"type": "string", "format": "date-time"}}}},
+    "contacts": {"type": "array", "items": {"$ref": "#/$defs/contact"}},
+    "score_components": {"type": "object", "properties": {"direct_procurement_capability": {"type": "number", "minimum": 0, "maximum": 25}, "product_commercial_fit": {"type": "number", "minimum": 0, "maximum": 20}, "purchasing_scale_moq_fit": {"type": "number", "minimum": 0, "maximum": 20}, "current_demand_timing": {"type": "number", "minimum": 0, "maximum": 15}, "supplier_openness": {"type": "number", "minimum": 0, "maximum": 10}, "market_delivery_compliance_fit": {"type": "number", "minimum": 0, "maximum": 10}}, "additionalProperties": false},
+    "total_score": {"type": "integer", "minimum": 0, "maximum": 100},
+    "priority": {"enum": ["A", "B", "C", "excluded", "review", "排除"]},
+    "discovery_source": {"type": "string"},
+    "discovery_query": {"type": ["string", "null"]},
+    "retrieved_at": {"type": "string", "format": "date-time"},
+    "review_status": {"enum": ["ai_reviewed", "human_reviewed", "needs_review"]},
+    "qualification_status": {"enum": ["qualified", "needs_review", "excluded"]},
+    "review_question": {"type": ["string", "null"]},
+    "notes": {"type": ["string", "null"]}
+  },
+  "$defs": {
+    "contact": {
+      "type": "object",
+      "required": ["channel", "value", "status", "source_url", "retrieved_at"],
+      "properties": {
+        "channel": {"enum": ["email", "phone", "whatsapp", "contact_form", "linkedin", "other_social"]},
+        "value": {"type": "string"},
+        "person_name": {"type": ["string", "null"]},
+        "role": {"type": ["string", "null"]},
+        "status": {"enum": ["published_official_site", "published_official_social", "published_directory_or_api", "verified_third_party", "inferred_unverified"]},
+        "source_url": {"type": "string", "format": "uri"},
+        "retrieved_at": {"type": "string", "format": "date-time"}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"qualification_status": {"const": "qualified"}},
+        "required": ["qualification_status"]
+      },
+      "then": {
+        "required": ["product_relationship", "target_product_purchase_pathway", "target_product_evidence_url"],
+        "properties": {
+          "product_relationship": {"enum": ["exact_target", "direct_use", "adjacent_with_transaction_bridge"]},
+          "target_product_purchase_pathway": {"type": "string", "minLength": 1},
+          "target_product_evidence_url": {"type": "string", "format": "uri"}
+        }
+      }
+    }
+  ],
+  "additionalProperties": true
+}

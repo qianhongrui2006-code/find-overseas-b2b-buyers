@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "contract_version": "1.0",
+  "required_for_full_run": [
+    "file_read",
+    "web_search",
+    "public_web_read",
+    "structured_data_transform",
+    "xlsx_write"
+  ],
+  "optional": [
+    "browser_render",
+    "public_social_search",
+    "authorized_social_api",
+    "maps_places_search",
+    "licensed_contact_provider",
+    "licensed_trade_data",
+    "email_validation",
+    "crm_write"
+  ],
+  "capabilities": {
+    "file_read": "Read user-authorized documents, images, spreadsheets, and catalogues.",
+    "web_search": "Discover candidate URLs with language and geography-aware search.",
+    "public_web_read": "Read public pages without bypassing access controls.",
+    "structured_data_transform": "Normalize domains, validate records, deduplicate, and score.",
+    "xlsx_write": "Create and verify a five-sheet XLSX deliverable.",
+    "browser_render": "Render JavaScript-dependent public pages when ordinary fetch is insufficient.",
+    "public_social_search": "Discover publicly indexed social posts and official company profiles without bypassing access controls.",
+    "authorized_social_api": "Use user-provided approved platform/API access for repeatable social monitoring under current scopes and quotas.",
+    "maps_places_search": "Use an authorized maps/places service under its terms.",
+    "licensed_contact_provider": "Use a user-authorized contact database and retain provider status.",
+    "licensed_trade_data": "Use licensed import/trade data with entity and HS-code verification.",
+    "email_validation": "Use a permitted verification service; never send probe marketing messages.",
+    "crm_write": "Write approved records only after explicit user authorization."
+  },
+  "degradation_rules": {
+    "no_web_search": "Accept candidate URLs/lists from the user and continue with verification.",
+    "no_public_web_read": "Stop at ICP and search-plan output.",
+    "no_xlsx_write": "Return schema-valid JSON or CSV plus a delivery limitation.",
+    "no_maps_places_search": "Use official sites, directories, associations, and exhibitor sources.",
+    "no_contact_provider": "Use public corporate contacts only.",
+    "no_social_api": "Use public indexed social pages only, state partial coverage, and do not claim exhaustive monitoring."
+  }
+}

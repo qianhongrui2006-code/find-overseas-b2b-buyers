@@ -1,0 +1,7 @@
+outputs/
+**/__pycache__/
+*.pyc
+*.zip
+*.inspect.ndjson
+.DS_Store
+Thumbs.db

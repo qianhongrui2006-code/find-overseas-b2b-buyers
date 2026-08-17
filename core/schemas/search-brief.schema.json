@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/find-overseas-b2b-buyers/search-brief.schema.json",
+  "title": "Confirmed Search Brief",
+  "type": "object",
+  "required": [
+    "brief_id",
+    "task_id",
+    "product_scope",
+    "target_markets",
+    "buyer_type_priority",
+    "hard_requirements",
+    "exclusions",
+    "sample_size",
+    "target_count",
+    "confirmation_status"
+  ],
+  "properties": {
+    "brief_id": {"type": "string"},
+    "task_id": {"type": "string"},
+    "product_scope": {
+      "type": "object",
+      "required": ["include", "exclude"],
+      "properties": {
+        "include": {"type": "array", "items": {"type": "string"}},
+        "exclude": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "target_markets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["country", "languages"],
+        "properties": {
+          "country": {"type": "string"},
+          "languages": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "buyer_type_priority": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type", "priority", "rationale"],
+        "properties": {
+          "type": {"type": "string"},
+          "priority": {"type": "integer", "minimum": 1},
+          "rationale": {"type": "string"}
+        }
+      }
+    },
+    "hard_requirements": {"type": "array", "items": {"type": "string"}},
+    "positive_signals": {"type": "array", "items": {"type": "string"}},
+    "exclusions": {"type": "array", "items": {"type": "string"}},
+    "contact_priority": {"type": "array", "items": {"type": "string"}},
+    "source_plan": {"type": "array", "items": {"type": "string"}},
+    "sample_size": {"type": "integer", "minimum": 3, "maximum": 10},
+    "target_count": {"type": "integer", "minimum": 1, "maximum": 1000},
+    "confirmation_status": {"enum": ["draft", "confirmed", "waived_for_sample"]},
+    "confirmed_at": {"type": ["string", "null"], "format": "date-time"}
+  },
+  "additionalProperties": true
+}

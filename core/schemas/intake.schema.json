@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/find-overseas-b2b-buyers/intake.schema.json",
+  "title": "Overseas B2B Buyer Discovery Intake",
+  "type": "object",
+  "required": ["task_id", "input_modes", "products", "target_markets", "buyer_types", "target_count"],
+  "properties": {
+    "task_id": {"type": "string", "minLength": 1},
+    "input_modes": {"type": "array", "items": {"enum": ["description", "document", "image", "spreadsheet", "website", "existing_leads"]}, "minItems": 1, "uniqueItems": true},
+    "products": {"type": "array", "items": {"type": "object", "required": ["name"], "properties": {"name": {"type": "string"}, "materials": {"type": "array", "items": {"type": "string"}}, "applications": {"type": "array", "items": {"type": "string"}}, "features": {"type": "array", "items": {"type": "string"}}}}, "minItems": 1},
+    "target_markets": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+    "buyer_types": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+    "target_count": {"type": "integer", "minimum": 1, "maximum": 1000},
+    "cooperation_modes": {"type": "array", "items": {"type": "string"}},
+    "moq": {"type": ["string", "null"]},
+    "price_position": {"type": ["string", "null"]},
+    "capacity": {"type": ["string", "null"]},
+    "lead_time": {"type": ["string", "null"]},
+    "certifications": {"type": "array", "items": {"type": "string"}},
+    "contact_priority": {"type": "array", "items": {"type": "string"}},
+    "exclusions": {"type": "array", "items": {"type": "string"}},
+    "ideal_customer_examples": {"type": "array", "items": {"type": "string", "format": "uri"}},
+    "competitors": {"type": "array", "items": {"type": "string"}},
+    "facts": {"type": "array", "items": {"$ref": "#/$defs/sourcedFact"}},
+    "unknowns": {"type": "array", "items": {"type": "string"}}
+  },
+  "$defs": {
+    "sourcedFact": {
+      "type": "object",
+      "required": ["field", "value", "status"],
+      "properties": {
+        "field": {"type": "string"},
+        "value": {},
+        "status": {"enum": ["user_confirmed", "document_confirmed", "website_confirmed", "inferred", "unknown"]},
+        "source": {"type": ["string", "null"]}
+      }
+    }
+  },
+  "additionalProperties": true
+}
