@@ -13,6 +13,7 @@
     "exclusions",
     "sample_size",
     "target_count",
+    "output_destination",
     "confirmation_status"
   ],
   "properties": {
@@ -56,6 +57,16 @@
     "source_plan": {"type": "array", "items": {"type": "string"}},
     "sample_size": {"type": "integer", "minimum": 3, "maximum": 10},
     "target_count": {"type": "integer", "minimum": 1, "maximum": 1000},
+    "output_destination": {
+      "type": "object",
+      "required": ["directory", "selection_mode", "status"],
+      "properties": {
+        "directory": {"type": "string", "minLength": 1},
+        "selection_mode": {"enum": ["user_specified", "default_accepted"]},
+        "status": {"enum": ["pending", "confirmed", "write_blocked"]}
+      },
+      "additionalProperties": false
+    },
     "confirmation_status": {"enum": ["draft", "confirmed", "waived_for_sample"]},
     "confirmed_at": {"type": ["string", "null"], "format": "date-time"}
   },

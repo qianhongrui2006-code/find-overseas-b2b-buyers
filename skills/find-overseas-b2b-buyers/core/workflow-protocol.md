@@ -9,8 +9,8 @@ This file is the canonical orchestration contract. A platform adapter may change
 | `INTAKE` | Accept business description, files, URLs, or mixed input | intake object with source labels | `PROFILE` |
 | `PROFILE` | Extract supplier capabilities and create preliminary ICP | profile plus unknowns | `CLARIFY` or `BRIEF` |
 | `CLARIFY` | Ask at most one concise round of high-impact questions | updated intake/profile | `BRIEF` |
-| `BRIEF` | Define targets, hard rules, signals, exclusions, contacts, sources, count | search-brief object | `AWAIT_CONFIRMATION` |
-| `AWAIT_CONFIRMATION` | Obtain explicit approval for the company understanding and current-run screening brief | approval or requested edits | `SAMPLE` or `BRIEF` |
+| `BRIEF` | Define targets, hard rules, signals, exclusions, contacts, sources, count, and output destination | search-brief object | `AWAIT_CONFIRMATION` |
+| `AWAIT_CONFIRMATION` | Obtain explicit approval for the company understanding, current-run screening brief, and output destination | approval or requested edits | `SAMPLE` or `BRIEF` |
 | `SAMPLE` | Research 3–10 candidates and apply evidence rules | sample batch | `AWAIT_SAMPLE_FEEDBACK` |
 | `AWAIT_SAMPLE_FEEDBACK` | Calibrate buyer types and qualification thresholds | approval or corrections | `SCALE` or `BRIEF` |
 | `SCALE` | Expand the candidate pool with limits, cache, and deduplication | researched candidates | `QUALIFY` |
@@ -21,7 +21,7 @@ This file is the canonical orchestration contract. A platform adapter may change
 
 ## Mandatory gates
 
-1. Do not enter `SAMPLE` or `SCALE` before the user explicitly confirms both the company understanding and current-run screening brief. A website, file, requested lead count, or initial instruction to search is not confirmation. Reading the supplier's own public website during `PROFILE` is allowed. If country or region, product scope, buyer type, exclusions, or count changes materially, return to `BRIEF` and reconfirm.
+1. Do not enter `SAMPLE` or `SCALE` before the user explicitly confirms the company understanding, current-run screening brief, and output destination. If the user did not provide a folder, ask exactly once whether to provide one or accept a displayed concrete default. Once supplied or accepted, do not ask again unless writing fails or the user changes the path. A website, file, requested lead count, or initial instruction to search is not confirmation. Reading the supplier's own public website during `PROFILE` is allowed. If country or region, product scope, buyer type, exclusions, count, or output destination changes materially, return to `BRIEF` and reconfirm.
 2. Treat the supplier's global or historical market coverage as profile context, never as the current search geography. Search only the countries or regions confirmed in the current brief.
 3. Do not retain a final lead without at least one sourced published or verified business email or phone number; if both are absent, place it in `excluded` with `no_usable_email_or_phone`. Contact forms and inferred-only emails do not pass this gate.
 4. Do not place a company in `qualified` without an official domain or authoritative identity source, an eligible product relationship (`exact_target`, `direct_use`, or `adjacent_with_transaction_bridge`), a target-product evidence URL, direct procurement capability, and the contact gate. `adjacent_only` belongs in review or a separately labeled expansion lane.
@@ -30,7 +30,8 @@ This file is the canonical orchestration contract. A platform adapter may change
 7. Keep commercial score separate from evidence confidence. A `low`-confidence candidate cannot enter `qualified` regardless of score; unresolved material identity, product-pathway, geography, or contact conflicts require review or exclusion.
 8. Treat government registration as optional identity evidence only. Do not bulk-enumerate registries by default, do not add commercial points for registration, and stop at login, CAPTCHA, paywall, `429`, or access denial.
 9. For every source channel planned in the confirmed brief, record `found`, `checked_no_result`, `blocked`, `unavailable`, or `not_checked`, plus concise findings and URLs where available. Mark explicit purchase intent only from a dated source that directly requests the target product, supplier, quotation, tender response, or procurement partner.
-10. Do not enter `DELIVER` until QA reports no blocking schema, evidence, channel-disclosure, or duplicate errors.
+10. Never write generated customer data into the installed Skill directory. Save all deliverables below the confirmed output root; request normal host permission for paths outside the workspace and never silently substitute another directory.
+11. Do not enter `DELIVER` until QA reports no blocking schema, evidence, channel-disclosure, destination, or duplicate errors.
 
 ## Source labels
 

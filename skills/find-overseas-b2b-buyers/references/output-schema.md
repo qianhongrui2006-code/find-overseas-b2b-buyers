@@ -26,7 +26,9 @@ Calculate 命中率 from qualified/reviewed counts; do not hardcode calculated v
 
 ## 任务说明
 
-Record original request, confirmed ICP, hard rules, positive signals, exclusions, contact priority, source plan, score thresholds, execution dates, requested and delivered counts, coverage, blockers, and compliance notes.
+Record original request, confirmed ICP, hard rules, positive signals, exclusions, contact priority, source plan, confirmed output destination and whether it was user-specified or default-accepted, score thresholds, execution dates, requested and delivered counts, coverage, blockers, and compliance notes.
+
+Save the workbook and all associated task outputs below the confirmed output root. Do not place generated customer data inside the installed Skill directory. Never change to an undisclosed fallback folder when writing fails.
 
 ## 渠道验证
 

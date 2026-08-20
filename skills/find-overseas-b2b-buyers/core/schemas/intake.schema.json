@@ -11,6 +11,7 @@
     "target_markets": {"type": "array", "items": {"type": "string"}, "minItems": 1},
     "buyer_types": {"type": "array", "items": {"type": "string"}, "minItems": 1},
     "target_count": {"type": "integer", "minimum": 1, "maximum": 1000},
+    "requested_output_directory": {"type": ["string", "null"]},
     "cooperation_modes": {"type": "array", "items": {"type": "string"}},
     "moq": {"type": ["string", "null"]},
     "price_position": {"type": ["string", "null"]},

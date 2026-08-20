@@ -25,6 +25,7 @@ This WorkBuddy package uses [core/workflow-protocol.md](core/workflow-protocol.m
 - Do not lower qualification standards to reach a requested count. Report shortfalls honestly.
 - Treat the supplier's existing or global market coverage as background only. Never expand the current run to every country the supplier serves. Use only the countries or regions explicitly confirmed for the current run.
 - Do not start prospect discovery merely because the user supplied a target count such as 50. First present the company understanding and current-run screening brief, then obtain explicit approval.
+- Do not start prospect discovery until the output destination is confirmed. If the user has not supplied a folder, ask once in the screening-brief confirmation whether to use a specific path or the displayed default task output folder. Do not repeat the question after the user confirms a path or accepts the default, unless writing to that location fails or the user changes it.
 - Treat contactability as a hard gate, not a score. Keep a company only when it has at least one sourced, published or verified business email or phone number. If both are absent, exclude it from the final lead list; a contact form, social direct-message route, or inferred-only email does not pass this gate.
 - Keep product relationship separate from channel similarity. A company that only sells, uses, or services an adjacent/complementary product is a discovery candidate, not a qualified buyer, unless official evidence establishes a transactional bridge to the user's target product.
 - Classify every verified candidate as `exact_target`, `direct_use`, `adjacent_with_transaction_bridge`, `adjacent_only`, `unrelated`, or `unknown`. By default, only the first three may enter the main qualified list. Put `adjacent_only` in review; contactability can never compensate for a missing target-product purchase pathway.
@@ -85,12 +86,15 @@ Before any prospect discovery, produce one short, confirmation-ready response wi
 - desired contact roles and acceptable fallback contacts;
 - target count and research depth;
 - proposed sources and limitations.
+- output folder for the workbook, channel evidence, intermediate data, and execution summary; mark it as user-specified or default-accepted.
 
 Explain the reasoning in business language. For example, a glassware distributor already carrying drinking glasses is a prospect because its catalogue and channel imply recurring sourcing—not because it says “I want glass cups.”
 
-End with a direct confirmation request such as: “请确认是否按以上公司理解和本轮筛选标准执行；如需修改，请指出国家、客户类型、产品范围或数量。” Treat “确认”“可以”“按这个执行” or an equally clear reply as approval. A requested quantity, website URL, uploaded file, or instruction to find leads is not by itself approval of the generated brief.
+If the user already supplied an output path, repeat it in the brief and include it in the ordinary approval request; do not ask a second folder question. If no path was supplied, display a concrete default such as `<current-workspace>/outputs/<task-name>-<date>` and ask exactly once: “请提供输出文件夹，或回复‘使用默认目录’。” The user must either provide a path or explicitly accept the displayed default.
 
-Do not enter prospect discovery, including a calibration sample, until the user explicitly confirms this brief. Reading the user's own public website to build the company understanding is allowed before confirmation. If the target geography is missing or ambiguous, ask for it; do not substitute the supplier's global customer footprint. If the user later changes a material field—especially country or region, product scope, buyer type, exclusions, or count—issue a revised short brief and reconfirm before continuing.
+End with a direct confirmation request such as: “请确认是否按以上公司理解、本轮筛选标准和输出位置执行；如需修改，请指出国家、客户类型、产品范围、数量或保存路径。” Treat “确认”“可以”“按这个执行” or an equally clear reply as approval only when an output destination has already been supplied or accepted. A requested quantity, website URL, uploaded file, or instruction to find leads is not by itself approval of the generated brief.
+
+Do not enter prospect discovery, including a calibration sample, until the user explicitly confirms this brief and `output_destination_status` is `confirmed`. Reading the user's own public website to build the company understanding is allowed before confirmation. If the target geography is missing or ambiguous, ask for it; do not substitute the supplier's global customer footprint. If the user later changes a material field—especially country or region, product scope, buyer type, exclusions, count, or output path—issue a revised short brief and reconfirm before continuing.
 
 ### 3. Plan discovery
 
@@ -169,6 +173,8 @@ Do not enrich contacts for candidates already excluded during triage. In fast mo
 ### 8. Deliver the workbook
 
 Read [references/output-schema.md](references/output-schema.md). Use `assets/海外B2B客户名单模板.xlsx` when available, or create an equivalent workbook with the spreadsheet tooling available in the environment.
+
+Save all task outputs under the confirmed output root. Never save generated customer data inside the installed Skill directory. If the confirmed path is outside the active workspace, request the host platform's normal file permission rather than silently changing destinations. Create only task-relevant subfolders beneath the confirmed root. If writing fails, report the exact path and ask whether to grant access or choose a new location; do not continue with an undisclosed fallback.
 
 Deliver these sheets:
 
