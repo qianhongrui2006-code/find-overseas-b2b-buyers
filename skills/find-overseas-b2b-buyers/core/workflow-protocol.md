@@ -14,7 +14,7 @@ This file is the canonical orchestration contract. A platform adapter may change
 | `SAMPLE` | Research 3–10 candidates and apply evidence rules | sample batch | `AWAIT_SAMPLE_FEEDBACK` |
 | `AWAIT_SAMPLE_FEEDBACK` | Calibrate buyer types and qualification thresholds | approval or corrections | `SCALE` or `BRIEF` |
 | `SCALE` | Expand the candidate pool with limits, cache, and deduplication | researched candidates | `QUALIFY` |
-| `QUALIFY` | Apply hard exclusions, scoring, and contact status | qualified/review/excluded groups | `QA` |
+| `QUALIFY` | Apply hard exclusions, internal scoring, and contact status | qualified/review/excluded groups | `QA` |
 | `QA` | Validate schemas, evidence, duplicates, contacts, formulas, and counts | QA report | `DELIVER` |
 | `DELIVER` | Produce workbook and concise batch summary | XLSX plus batch object | terminal |
 | `BLOCKED` | Record unavailable capability, source, permission, or legal boundary | blocker and safe fallback | user-dependent |
@@ -32,6 +32,7 @@ This file is the canonical orchestration contract. A platform adapter may change
 9. For every source channel planned in the confirmed brief, record `found`, `checked_no_result`, `blocked`, `unavailable`, or `not_checked`, plus concise findings and URLs where available. Mark explicit purchase intent only from a dated source that directly requests the target product, supplier, quotation, tender response, or procurement partner.
 10. Never write generated customer data into the installed Skill directory. Save all deliverables below the confirmed output root; request normal host permission for paths outside the workspace and never silently substitute another directory.
 11. Do not enter `DELIVER` until QA reports no blocking schema, evidence, channel-disclosure, destination, or duplicate errors.
+12. For commercial/shipment/logistics platforms, identify the record role before qualification. Do not treat forwarders, brokers, NVOCCs/carriers, notify parties, or care-of addresses as product buyers without separate official evidence.
 
 ## Source labels
 
@@ -76,10 +77,10 @@ Retry transient reads within host limits. Stop repeated failures. Do not bypass 
 
 Within `SAMPLE` and `SCALE`, use this sub-funnel:
 
-1. `DISCOVER_LIGHT`: collect company name, official URL, snippet-level product/role signals, discovery query, and known-domain match. Do not search contacts.
+1. `DISCOVER_LIGHT`: collect only company name, official/candidate URL, country, source role, product/HS clue, latest relevant date, visible contact clue, discovery query, and known-domain match. Do not enrich contacts, addresses, social links, or long evidence.
 2. `TRIAGE`: normalize domains, remove prior/duplicate domains, apply hard exclusions, and rank survivors with `scripts/triage_candidates.py`.
 3. `VERIFY_DEEP`: open only high-ranked survivors. Default to Home/Product, About/Group, Legal, and Contact pages; stop when qualification is already decided.
 4. `CONTACT_MINIMUM`: collect one sourced published or verified email or phone for surviving companies. Stop when either is found. Exclude candidates when both remain absent after allowed sources are exhausted. Contact forms may be reported as supplementary routes but do not pass the gate. Named-person enrichment and a second contact channel are optional and come later.
-5. `DELIVER`: reuse a tested template/builder and record measured stage durations.
+5. `DELIVER`: reuse a tested template/builder and record measured stage durations. Show only owner-facing sales fields in the workbook; keep lead IDs, scores, normalized domains, queries, and exclusion logs in structured internal data.
 
 For calibration, stop discovery near three times the requested lead count. If fewer candidates survive, run one additional query family before lowering any threshold. Cache normalized domains and decisive evidence so subsequent runs do not repeat unchanged work.

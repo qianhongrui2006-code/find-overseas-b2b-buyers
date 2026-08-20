@@ -7,11 +7,13 @@ Use this mode for a first sample, a repeated country/industry test, or a user-re
 | Stage | Input | Action | Stop condition |
 |---|---|---|---|
 | Brief reuse | confirmed supplier profile | reuse product, buyer, exclusion, MOQ, and country rules | do not re-read unchanged supplier pages |
-| Light discovery | 2–3 query families | capture name, official URL, snippet/product/role signals only | pool reaches about 3× target or results become mostly duplicates |
+| Light discovery | 2–3 query families | capture name, official/candidate URL, country, source role, product/HS clue, latest date, and visible contact clue only | pool reaches about 3× target or results become mostly duplicates |
 | Deterministic triage | candidate JSON + prior domains | normalize, deduplicate, hard-exclude, quick-rank | keep about 2× target for deep verification |
 | Deep verification | ranked survivors | check product, buyer identity, factory/group, demand/scale | qualification is decided or four useful official pages were checked |
 | Minimum contact | surviving candidates | collect one sourced published or verified email or phone | either channel found, or allowed contact sources exhausted and candidate excluded |
 | Delivery | accepted sample | reuse workbook template/builder and run compact QA | formulas, duplicates, evidence, and layout pass |
+
+Do not enrich all candidates. Use `DISCOVER_LIGHT → TRIAGE → VERIFY_DEEP → CONTACT_MINIMUM → DELIVER`. Collect address/maps, social/news links, named contacts, second contact channel, and detailed trade history only for survivors when they can change the decision or outreach route.
 
 ## Hard exclusions at triage
 

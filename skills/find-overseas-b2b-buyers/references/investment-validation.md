@@ -12,7 +12,7 @@ Use this order for normal research:
 2. Maps or an authoritative local business profile: corroborate physical presence, operating status, website, address, and phone.
 3. Official company social posts, news, and recruitment: identify dated launches, expansion, procurement hiring, new locations, supplier onboarding, or other timing signals.
 4. Official trade-show exhibitor and industry-association pages: corroborate industry participation and current activity; never treat membership or attendance as purchase intent by itself.
-5. Licensed or user-authorized trade/import data: corroborate import behavior, frequency, scale, and entity matching while recording classification uncertainty.
+5. Public commercial platforms and licensed/user-authorized trade/import data: discover or corroborate companies, public contacts, import behavior, frequency, scale, and entity matching while recording platform role and classification uncertainty.
 6. Government registry: use only for targeted identity or status checks when a high-value candidate is ambiguous, conflicting, or requires legal-name confirmation.
 
 Do not enumerate a government registry to create the candidate pool by default. Do not give score points merely because a company is registered.
@@ -60,6 +60,7 @@ For each source channel planned in the confirmed brief, disclose whether it was 
 - Official social/news/recruitment: record the relevant page or post URL; summarize only the business implication.
 - Trade show/association: record the exhibitor/member/profile URL and what it verifies, not an assumed buying need.
 - Authorized trade data: record the provider/source URL or dataset reference and entity/product-matching limitations.
+- Freight/logistics records: record whether the named entity is buyer/importer, consignee, shipper, notify party, forwarder, broker, NVOCC/carrier, or unknown. Intermediaries do not inherit buyer status.
 
 Mark purchase intent `explicit` only for a dated public request for the target product, supplier, quotation, tender response, procurement partner, or equivalent transaction. Otherwise use `not_found` or `unclear`. Do not treat a catalogue, hiring post, show attendance, association membership, company growth, or import history as an explicit buying request.
 

@@ -29,6 +29,7 @@
     "explicit_purchase_intent": {"enum": ["explicit", "not_found", "unclear"]},
     "explicit_intent_summary": {"type": ["string", "null"]},
     "source_checks": {"type": "array", "items": {"$ref": "#/$defs/source_check"}},
+    "commercial_data_records": {"type": "array", "items": {"$ref": "#/$defs/commercial_data_record"}},
     "scale_signals": {"type": "array", "items": {"type": "string"}},
     "evidence_confidence": {"enum": ["high", "medium", "low"]},
     "identity_status": {"enum": ["confirmed", "probable", "unverified", "conflict"]},
@@ -50,11 +51,27 @@
     "notes": {"type": ["string", "null"]}
   },
   "$defs": {
+    "commercial_data_record": {
+      "type": "object",
+      "required": ["platform", "source_reference", "record_role", "entity_match_confidence", "retrieved_at"],
+      "properties": {
+        "platform": {"type": "string"},
+        "source_reference": {"type": "string"},
+        "record_role": {"enum": ["buyer_importer", "consignee", "shipper_supplier", "notify_party", "freight_forwarder", "customs_broker", "nvocc_carrier", "unknown"]},
+        "product_or_hs": {"type": ["string", "null"]},
+        "latest_record_date": {"type": ["string", "null"], "format": "date"},
+        "activity_summary": {"type": ["string", "null"]},
+        "entity_match_confidence": {"enum": ["high", "medium", "low"]},
+        "notes": {"type": ["string", "null"]},
+        "retrieved_at": {"type": "string", "format": "date-time"}
+      },
+      "additionalProperties": false
+    },
     "source_check": {
       "type": "object",
       "required": ["channel", "check_status", "retrieved_at"],
       "properties": {
-        "channel": {"enum": ["official_site_catalogue", "maps_local_profile", "official_social", "official_news", "recruitment", "trade_show", "industry_association", "authorized_trade_data", "government_registry", "other_authoritative"]},
+        "channel": {"enum": ["official_site_catalogue", "maps_local_profile", "public_commercial_platform", "authorized_trade_data", "freight_logistics_directory", "official_social", "official_news", "recruitment", "trade_show", "industry_association", "government_registry", "other_authoritative"]},
         "check_status": {"enum": ["found", "checked_no_result", "blocked", "unavailable", "not_checked"]},
         "concise_finding": {"type": ["string", "null"]},
         "url": {"type": ["string", "null"], "format": "uri"},

@@ -1,6 +1,6 @@
 ---
 name: find-overseas-b2b-buyers
-description: Build an ideal customer profile from a user's business description, uploaded product/company documents, images, catalogues, or public company website; discover, verify, score, deduplicate, and export overseas B2B company leads with public business contact details and source evidence. Use when a manufacturer, exporter, factory owner, foreign-trade salesperson, or B2B seller asks to find overseas buyers, importers, distributors, wholesalers, brands, retailers, hospitality suppliers, corporate-gift companies, or similar prospects through web search, Google Maps/Places, directories, exhibitor lists, competitor channels, or company websites, and wants a reviewable Excel lead list.
+description: Build an ideal customer profile from a user's business description, uploaded product/company documents, images, catalogues, or public company website; discover, verify, internally score, deduplicate, and export overseas B2B company leads with public business contact details and source evidence. Use when a manufacturer, exporter, factory owner, foreign-trade salesperson, or B2B seller asks to find overseas buyers, importers, distributors, wholesalers, brands, retailers, hospitality suppliers, corporate-gift companies, or similar prospects through web search, Google Maps/Places, commercial directories, public or authorized trade-data platforms, exhibitor lists, competitor channels, or company websites, and wants a concise reviewable Excel lead list.
 ---
 
 # Find Overseas B2B Buyers
@@ -9,7 +9,7 @@ description: Build an ideal customer profile from a user's business description,
 
 Turn incomplete product information into a confirmed search brief, then deliver contact-ready potential customer companies. Optimize for two outcomes: credible purchase-likelihood evidence and a published email or phone number. Treat background enrichment as secondary and never describe inferred likelihood as confirmed current intent.
 
-This WorkBuddy package uses [core/workflow-protocol.md](core/workflow-protocol.md) as the canonical workflow and the JSON Schemas under `core/schemas/` for structured state. Use the web, browser, file-reading, code, and spreadsheet capabilities available in the current WorkBuddy environment. When a capability is unavailable, follow `core/capability-contract.json`, state the limitation, and use the documented fallback instead of claiming completion.
+This Codex adapter is one entry point to the platform-neutral package. Use [core/workflow-protocol.md](core/workflow-protocol.md) as the canonical state machine and the JSON Schemas under `core/schemas/` whenever exchanging structured state with another platform or service.
 
 ## Non-negotiable rules
 
@@ -29,6 +29,7 @@ This WorkBuddy package uses [core/workflow-protocol.md](core/workflow-protocol.m
 - Treat contactability as a hard gate, not a score. Keep a company only when it has at least one sourced, published or verified business email or phone number. If both are absent, exclude it from the final lead list; a contact form, social direct-message route, or inferred-only email does not pass this gate.
 - Keep product relationship separate from channel similarity. A company that only sells, uses, or services an adjacent/complementary product is a discovery candidate, not a qualified buyer, unless official evidence establishes a transactional bridge to the user's target product.
 - Classify every verified candidate as `exact_target`, `direct_use`, `adjacent_with_transaction_bridge`, `adjacent_only`, `unrelated`, or `unknown`. By default, only the first three may enter the main qualified list. Put `adjacent_only` in review; contactability can never compensate for a missing target-product purchase pathway.
+- Treat freight forwarders, customs brokers, NVOCCs, carriers, and notify parties as intermediaries unless the confirmed brief explicitly targets logistics buyers. Their directory or shipment appearance may reveal a route or candidate, but never proves that they purchase the user's product.
 
 ## Select an entry path
 
@@ -108,7 +109,10 @@ Prefer sources in this order when appropriate:
 4. Trade associations and exhibitor/member lists.
 5. Competitor stockists, dealers, and retailer networks.
 6. Official company social pages and LinkedIn for company/contact enrichment.
-7. Licensed trade/import or contact databases when the user has access and requests them.
+7. Public commercial information platforms and permitted directories for discovery or corroboration.
+8. Licensed/user-authorized trade, shipment, or contact databases when available.
+
+Read [references/commercial-data-platforms.md](references/commercial-data-platforms.md) before using company aggregators, freight/logistics directories, customs records, bills of lading, or user-exported platform data. Record the entity role shown by the source and resolve the candidate to an operating company and official domain before qualification. Never bypass login, CAPTCHA, export, subscription, or API controls; ask the user to provide an authorized export or access route when needed.
 
 Treat government registries as an optional identity-check source, not a default discovery channel or a commercial-value signal. Use them only for shortlisted candidates whose legal identity, operating status, or location is ambiguous or conflicting. Prefer official APIs/open datasets or a small manual lookup; do not bulk-enumerate registry pages.
 
@@ -118,7 +122,7 @@ Apply social recency and geography gates before scoring: default to 30 days for 
 
 Treat search snippets and list documents as discovery evidence only. Verify candidates on an official site or another authoritative source.
 
-For `fast_calibration`, start with at most three high-yield query families. Stop adding queries once the candidate pool reaches roughly 3 times the requested count or marginal results are mostly duplicates/noise.
+For `fast_calibration`, start with at most three high-yield query families. Stop adding queries once the candidate pool reaches roughly 3 times the requested count or marginal results are mostly duplicates/noise. During first-pass discovery collect only company name, candidate/official URL, country, source role, product/HS clue, dated activity clue, and one contact clue if already visible. Do not collect full addresses, social links, named contacts, every contact channel, or long evidence summaries until the candidate survives triage.
 
 ### 4. Research a calibration sample
 
@@ -134,11 +138,11 @@ For `fast_calibration`, start with at most three high-yield query families. Stop
 
 Use `scripts/triage_candidates.py` before deep verification. Feed it lightweight candidate facts and a prior-domain cache. Only open detailed product, legal, group, and contact pages for candidates that survive hard exclusions and rank near the top. Apply a default page budget of four relevant official pages per surviving domain; exceed it only when buyer/manufacturer identity remains decisive.
 
-### 5. Qualify and score
+### 5. Qualify and score internally
 
 Read [references/qualification-and-evidence.md](references/qualification-and-evidence.md) and [references/investment-validation.md](references/investment-validation.md). Apply hard exclusions first, then score only surviving candidates. Keep scoring explanations tied to evidence.
 
-After the contact and product-relationship gates pass, use a factory-buyer 100-point score: direct procurement capability 25, product/commercial fit 20, purchasing scale and MOQ fit 20, current demand/timing 15, supplier openness/switchability 10, and target-market delivery/compliance fit 10. Do not award points merely because both email and phone are present. Treat contact quality as an outreach-routing note and tie-breaker only.
+After the contact and product-relationship gates pass, use a factory-buyer 100-point score internally: direct procurement capability 25, product/commercial fit 20, purchasing scale and MOQ fit 20, current demand/timing 15, supplier openness/switchability 10, and target-market delivery/compliance fit 10. Do not award points merely because both email and phone are present. Treat contact quality as an outreach-routing note and tie-breaker only. Keep `lead_id`, score components, total score, normalized domain, discovery query, and exclusion details in the structured run data for deduplication, resuming, and QA; do not expose them in the default owner-facing workbook.
 
 Assign `evidence_confidence` independently as `high`, `medium`, or `low`, and record an `investment_action`. A high commercial score cannot compensate for low-confidence evidence. Only `high` or `medium` confidence may enter the qualified list; use `manual_review` or exclusion for unresolved material conflicts. Government registration can confirm identity but never adds commercial-score points.
 
@@ -176,20 +180,18 @@ Read [references/output-schema.md](references/output-schema.md). Use `assets/海
 
 Save all task outputs under the confirmed output root. Never save generated customer data inside the installed Skill directory. If the confirmed path is outside the active workspace, request the host platform's normal file permission rather than silently changing destinations. Create only task-relevant subfolders beneath the confirmed root. If writing fails, report the exact path and ask whether to grant access or choose a new location; do not continue with an undisclosed fallback.
 
-Deliver these sheets:
+Deliver four owner-facing sheets:
 
-1. `合格客户`
+1. `潜在客户`
 2. `待人工复核`
-3. `排除记录`
-4. `搜索策略`
-5. `任务说明`
-6. `渠道验证`
+3. `渠道证据`
+4. `任务摘要`
 
-In both lead sheets, put the decision-maker's most actionable fields first: company official name, reference/translated name, website, phone, email, WhatsApp, contact form or contact-source URL, contact person, role, and contact status. Put scoring fields and research evidence after this front contact block.
+Put sales-action fields first: company name, country/city, official website, business email, phone, WhatsApp, and contact-source URL. Follow with buyer type, matching product or purchase pathway, explicit-purchase-intent label and dated URL when present, verified address/map URL, recommended action, concise reason, evidence confidence, last verification date, and notes. Add only `待复核问题` to the review sheet.
 
-In the main lead sheets, show the verified address, Maps/local-profile URL, explicit-purchase-intent label, intent evidence URL, and a compact channel-coverage summary. In `渠道验证`, use one row per company and source URL with the channel, check status, concise finding, source URL, source date, retrieval date, and explicit-intent label. Include rows for checked channels with no result or blocked access so absence is visible rather than silently omitted.
+Do not show numeric scores, score components, priority tiers, `Lead ID`, normalized domains, discovery queries, or long exclusion/search logs in the default workbook. Preserve them in structured JSON or internal run logs. In `渠道证据`, use one row per company and source URL with the channel, check status, concise finding, source URL, information date, and explicit-intent label. Include planned channels with no result or blocked access so absence is visible rather than silently omitted.
 
-Verify formulas, filters, URLs, dates, categorical fields, duplicate domains, evidence completeness, and visible layout before delivery. Include a concise batch summary: researched count, qualified count, A/B/C distribution, contact coverage, main exclusions, limitations, and recommended next iteration.
+Verify formulas, filters, URLs, dates, categorical fields, duplicate domains, evidence completeness, and visible layout before delivery. Include a concise batch summary: researched count, qualified count, email/phone coverage, explicit-intent count, main exclusions, limitations, and recommended next iteration. Do not show A/B/C distribution unless the user specifically requests the scoring audit.
 
 For a speed test, also include a small `效率记录` sheet or structured summary with measured stage durations, candidate counts entering/leaving each stage, pages opened, and avoidable delays. Reuse the bundled workbook template or a tested builder instead of recreating layout logic for every run.
 

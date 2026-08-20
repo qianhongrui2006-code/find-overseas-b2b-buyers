@@ -12,6 +12,8 @@ Use the source that is authoritative for the claim rather than one global hierar
 
 Search snippets and unverified aggregations are discovery clues only. Record contradictory sources and mark unresolved conflicts rather than choosing silently. Apply the separate evidence-confidence and safe-verification rules in [investment-validation.md](investment-validation.md).
 
+For commercial or shipment platforms, record the role displayed by the source. A freight forwarder, customs broker, NVOCC/carrier, notify party, or “care of” address is not the buyer unless separate official evidence proves a target-product purchasing role. Historical imports support procurement activity and scale; they are not explicit current intent.
+
 ## Product-relationship gate
 
 Classify the relationship to the current brief's target deliverable before scoring:
@@ -88,6 +90,6 @@ Do not classify a company as importer merely because it sells imported-looking p
 
 ## Review outcomes
 
-- `合格客户`: meets all hard requirements, has purchase-likelihood evidence, and has at least one sourced published email or phone.
+- `潜在客户`: meets all hard requirements, has purchase-likelihood evidence, and has at least one sourced published email or phone.
 - `待人工复核`: has a usable email or phone and is promising, but has unresolved company, buyer-role, geography, product-pathway, scale, or commercial-fit questions.
 - `排除记录`: fails a hard rule or scores below the accepted threshold.

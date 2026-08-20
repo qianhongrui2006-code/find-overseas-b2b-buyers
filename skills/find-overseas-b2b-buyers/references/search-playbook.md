@@ -63,7 +63,11 @@ Test a few results before generating many variants. Search engines may reinterpr
 | Competitor stockists | Identify proven category sellers | stockist is independent or open to alternatives |
 | LinkedIn/social | Enrich roles and activity | employment/contact is current without corroboration |
 | Trade data | Verify import behavior | product classification and entity match are error-free |
+| Commercial company platform | Discover companies, categories, public contacts, or authorized RFQs | a listing is current, independent, or commercially qualified |
+| Freight/logistics directory | Verify a logistics company or discover trade-lane intermediaries | the forwarder, broker, NVOCC, carrier, or notify party buys the user's product |
 | Government registry | Targeted legal-name, status, or address verification for shortlisted ambiguous candidates | registration proves buying likelihood or deserves score points |
+
+Read [commercial-data-platforms.md](commercial-data-platforms.md) before using aggregators, shipment records, or freight/logistics collections. Resolve each source role and official domain before qualification.
 
 Do not crawl or enumerate government registries to build the default candidate pool. Prefer an official API/open dataset or a small manual lookup, obey published access limits, and stop at authentication, CAPTCHA, paywall, `429`, or access denial. Continue without the registry when website, maps, association, trade-show, and commercial evidence already establish a sufficient identity.
 
