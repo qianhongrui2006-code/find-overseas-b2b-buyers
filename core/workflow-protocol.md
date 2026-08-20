@@ -27,7 +27,9 @@ This file is the canonical orchestration contract. A platform adapter may change
 4. Do not place a company in `qualified` without an official domain or authoritative identity source, an eligible product relationship (`exact_target`, `direct_use`, or `adjacent_with_transaction_bridge`), a target-product evidence URL, direct procurement capability, and the contact gate. `adjacent_only` belongs in review or a separately labeled expansion lane.
 5. Do not place a contact value in output without status, source URL, and retrieval date.
 6. Do not mark current purchase intent unless a dated source explicitly supports it.
-7. Do not enter `DELIVER` until QA reports no blocking schema, evidence, or duplicate errors.
+7. Keep commercial score separate from evidence confidence. A `low`-confidence candidate cannot enter `qualified` regardless of score; unresolved material identity, product-pathway, geography, or contact conflicts require review or exclusion.
+8. Treat government registration as optional identity evidence only. Do not bulk-enumerate registries by default, do not add commercial points for registration, and stop at login, CAPTCHA, paywall, `429`, or access denial.
+9. Do not enter `DELIVER` until QA reports no blocking schema, evidence, or duplicate errors.
 
 ## Source labels
 

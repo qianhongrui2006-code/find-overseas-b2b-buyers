@@ -106,6 +106,8 @@ Prefer sources in this order when appropriate:
 6. Official company social pages and LinkedIn for company/contact enrichment.
 7. Licensed trade/import or contact databases when the user has access and requests them.
 
+Treat government registries as an optional identity-check source, not a default discovery channel or a commercial-value signal. Use them only for shortlisted candidates whose legal identity, operating status, or location is ambiguous or conflicting. Prefer official APIs/open datasets or a small manual lookup; do not bulk-enumerate registry pages.
+
 When the user requests social demand discovery, read [references/social-demand-signals.md](references/social-demand-signals.md). Search only publicly accessible/indexed content unless the user provides an authorized platform session or API. Treat a social post as a time-sensitive clue; link it to an identifiable company and corroborate the company's website/contact details before qualification.
 
 Apply social recency and geography gates before scoring: default to 30 days for strong signals, 90 days for usable signals, and treat older posts as background unless an active future deadline is explicit. Verify the company's target-market presence from an authoritative source; language, hashtag, poster location, or geotag alone is not enough.
@@ -128,9 +130,11 @@ Use `scripts/triage_candidates.py` before deep verification. Feed it lightweight
 
 ### 5. Qualify and score
 
-Read [references/qualification-and-evidence.md](references/qualification-and-evidence.md). Apply hard exclusions first, then score only surviving candidates. Keep scoring explanations tied to evidence.
+Read [references/qualification-and-evidence.md](references/qualification-and-evidence.md) and [references/investment-validation.md](references/investment-validation.md). Apply hard exclusions first, then score only surviving candidates. Keep scoring explanations tied to evidence.
 
 After the contact and product-relationship gates pass, use a factory-buyer 100-point score: direct procurement capability 25, product/commercial fit 20, purchasing scale and MOQ fit 20, current demand/timing 15, supplier openness/switchability 10, and target-market delivery/compliance fit 10. Do not award points merely because both email and phone are present. Treat contact quality as an outreach-routing note and tie-breaker only.
+
+Assign `evidence_confidence` independently as `high`, `medium`, or `low`, and record an `investment_action`. A high commercial score cannot compensate for low-confidence evidence. Only `high` or `medium` confidence may enter the qualified list; use `manual_review` or exclusion for unresolved material conflicts. Government registration can confirm identity but never adds commercial-score points.
 
 Use `scripts/lead_pipeline.py` for deterministic normalization, duplicate detection, weighted scoring, and schema checks when preparing or auditing structured lead JSON/CSV. Run `python scripts/lead_pipeline.py --help` for usage.
 

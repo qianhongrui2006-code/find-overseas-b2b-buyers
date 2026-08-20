@@ -8,7 +8,7 @@ Required column order:
 
 `公司官方名称`, `官方网站`, `业务邮箱`, `电话`, `WhatsApp`, `联系人姓名`, `职位`, `邮箱状态`, `电话状态`, `联系方式来源URL`, `产品关系`, `目标产品采购链路`, `目标产品证据URL`, `购买意向等级`, `购买意向依据`, `意向证据日期`, `意向证据URL`, `推荐开发理由`, `Lead ID`, `优先级`, `总分`, `直接采购能力分`, `产品与商业适配分`, `采购规模与MOQ适配分`, `近期需求与时机分`, `供应商开放度分`, `目标市场交付与合规适配分`, `国家`, `城市`, `公司类型`, `匹配产品或品牌`, `规范域名`, `联系表单`, `LinkedIn公司页`, `其他社媒`, `发现渠道`, `使用搜索式`, `抓取时间`, `复核状态`, `备注`.
 
-Keep the company and actionable contact block at the front even when an adapter adds extra research columns.
+Keep the company and actionable contact block at the front even when an adapter adds extra research columns. Immediately after the contact block include `证据可信度`, `身份验证状态`, `商业价值证据`, `证据冲突或缺口`, `建议投入动作`, and `政府注册复核状态`. Government registration is optional and must not be presented as a commercial-value score.
 
 Add `待复核问题` to the review sheet.
 
@@ -41,6 +41,7 @@ Record original request, confirmed ICP, hard rules, positive signals, exclusions
 - No duplicate normalized domains in `合格客户` unless an explained subsidiary/brand relationship exists.
 - Every qualified row has company name, official site/domain, country, company type, purchase rationale, dated/source-labeled intent evidence where available, discovery source, retrieval date, and review status.
 - Every qualified row has an eligible product relationship, an explained target-product purchase pathway, and a source URL supporting that pathway. Adjacent-only opportunities remain in review or a separately labeled expansion lane.
+- Every qualified row has `证据可信度` of high or medium, a claim-specific evidence trail, no unresolved blocking conflict, and a recommended investment action. Low-confidence records never enter the qualified sheet regardless of commercial score.
 - Every retained qualified/review row has at least one sourced published or verified email or phone. Records with neither are excluded; contact-form-only records do not remain in the lead sheets.
 - Every non-empty contact has a status and source URL.
 - Scores are 0–100 and consistent with tier thresholds.

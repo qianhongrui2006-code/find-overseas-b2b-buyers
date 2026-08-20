@@ -105,6 +105,12 @@ def validate(record: dict) -> list[str]:
             issues.append("missing:target_product_purchase_pathway")
         if not str(record.get("target_product_evidence_url", "")).strip():
             issues.append("missing:target_product_evidence_url")
+        evidence_confidence = str(record.get("evidence_confidence", "")).strip()
+        if evidence_confidence not in {"high", "medium"}:
+            issues.append("below_gate:evidence_confidence")
+        investment_action = str(record.get("investment_action", "")).strip()
+        if investment_action not in {"contact_now", "low_cost_test"}:
+            issues.append("invalid:qualified_investment_action")
         components = record.get("score_components") or {}
         procurement = clamp_score(components.get("direct_procurement_capability", 0), 25)
         product_fit = clamp_score(components.get("product_commercial_fit", 0), 20)
@@ -146,6 +152,10 @@ def process(records: list[dict]) -> tuple[list[dict], list[dict]]:
         else:
             record["total_score"] = calculate_score(record)
             record["priority"] = tier(record["total_score"])
+            if str(record.get("evidence_confidence", "")).strip() == "low":
+                record["qualification_status"] = "needs_review"
+                record["priority"] = "review"
+                record["investment_action"] = "manual_review"
         record["validation_issues"] = validate(record)
         if domain and domain in seen:
             record["duplicate_of_row"] = seen[domain]

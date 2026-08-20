@@ -6,17 +6,11 @@ Exclude before scoring when a confirmed condition violates the brief: wrong geog
 
 Keep an exclusion record with company/domain, URL, rule, evidence, and date.
 
-## Evidence hierarchy
+## Claim-specific evidence
 
-Use the strongest available source:
+Use the source that is authoritative for the claim rather than one global hierarchy. Official company pages and catalogues are strongest for products, commercial role, locations, and contacts. Maps/local business profiles can corroborate operating presence. Official social/news/recruitment pages support dated activity. Association and trade-show pages support participation, not purchase intent. Licensed trade data can support import behavior when entity and product classification match. Government registries support legal identity and status only; do not use registration as a commercial-value signal or bulk discovery channel.
 
-1. Official company product, about, contact, location, supplier, or legal page.
-2. Official regulator, registry, association, trade show, or licensed dataset.
-3. Official company social page.
-4. Reputable business directory or publication.
-5. Search snippet or unverified aggregation only as a discovery clue.
-
-Record contradictory sources. Mark unresolved conflicts rather than choosing silently.
+Search snippets and unverified aggregations are discovery clues only. Record contradictory sources and mark unresolved conflicts rather than choosing silently. Apply the separate evidence-confidence and safe-verification rules in [investment-validation.md](investment-validation.md).
 
 ## Product-relationship gate
 
@@ -66,7 +60,7 @@ Use evidence quality as a gate, not compensating points. Do not award points wit
 
 Do not award points without an evidence URL or an explicit source note. Unknown means zero for that component, not a negative fact.
 
-Default tiers: A = 80–100; B = 65–79; C = 50–64; below 50 = exclude or review depending on the brief. Regardless of total score, default `合格客户` requires an eligible product relationship and evidence URL, direct procurement capability at least 10/25, product/commercial fit at least 10/20, the first three commercial dimensions totaling at least 35/65, and the contact gate. `adjacent_only` stays in review; a candidate with no usable email or phone is excluded rather than reviewed.
+Default tiers: A = 80–100; B = 65–79; C = 50–64; below 50 = exclude or review depending on the brief. Regardless of total score, default `合格客户` requires an eligible product relationship and evidence URL, direct procurement capability at least 10/25, product/commercial fit at least 10/20, the first three commercial dimensions totaling at least 35/65, the contact gate, and `evidence_confidence` of `high` or `medium`. `adjacent_only` stays in review; a candidate with no usable email or phone is excluded rather than reviewed. Government registration never adds points.
 
 For social signals, award timing points only when the post date is known and the company/target geography is verified. Do not let an explicit supplier-request post override wrong buyer role, wrong product, wrong geography, weak company identity, insufficient direct procurement capability, or a failed contact gate.
 

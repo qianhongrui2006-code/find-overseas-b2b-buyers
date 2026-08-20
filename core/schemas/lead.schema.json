@@ -26,6 +26,12 @@
     "intent_evidence_date": {"type": ["string", "null"], "format": "date"},
     "intent_evidence_url": {"type": ["string", "null"], "format": "uri"},
     "scale_signals": {"type": "array", "items": {"type": "string"}},
+    "evidence_confidence": {"enum": ["high", "medium", "low"]},
+    "identity_status": {"enum": ["confirmed", "probable", "unverified", "conflict"]},
+    "government_registry_check": {"enum": ["not_needed", "checked", "blocked", "not_available"]},
+    "evidence_conflicts": {"type": "array", "items": {"type": "string"}},
+    "investment_action": {"enum": ["contact_now", "low_cost_test", "manual_review", "do_not_invest"]},
+    "commercial_value_evidence": {"type": "array", "items": {"type": "string"}},
     "evidence": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["claim", "url", "source_type", "retrieved_at"], "properties": {"claim": {"type": "string"}, "url": {"type": "string", "format": "uri"}, "source_type": {"type": "string"}, "retrieved_at": {"type": "string", "format": "date-time"}}}},
     "contacts": {"type": "array", "items": {"$ref": "#/$defs/contact"}},
     "score_components": {"type": "object", "properties": {"direct_procurement_capability": {"type": "number", "minimum": 0, "maximum": 25}, "product_commercial_fit": {"type": "number", "minimum": 0, "maximum": 20}, "purchasing_scale_moq_fit": {"type": "number", "minimum": 0, "maximum": 20}, "current_demand_timing": {"type": "number", "minimum": 0, "maximum": 15}, "supplier_openness": {"type": "number", "minimum": 0, "maximum": 10}, "market_delivery_compliance_fit": {"type": "number", "minimum": 0, "maximum": 10}}, "additionalProperties": false},
@@ -61,11 +67,13 @@
         "required": ["qualification_status"]
       },
       "then": {
-        "required": ["product_relationship", "target_product_purchase_pathway", "target_product_evidence_url"],
+        "required": ["product_relationship", "target_product_purchase_pathway", "target_product_evidence_url", "evidence_confidence", "investment_action"],
         "properties": {
           "product_relationship": {"enum": ["exact_target", "direct_use", "adjacent_with_transaction_bridge"]},
           "target_product_purchase_pathway": {"type": "string", "minLength": 1},
-          "target_product_evidence_url": {"type": "string", "format": "uri"}
+          "target_product_evidence_url": {"type": "string", "format": "uri"},
+          "evidence_confidence": {"enum": ["high", "medium"]},
+          "investment_action": {"enum": ["contact_now", "low_cost_test"]}
         }
       }
     }
