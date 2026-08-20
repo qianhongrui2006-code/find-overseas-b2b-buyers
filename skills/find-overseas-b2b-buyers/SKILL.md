@@ -57,7 +57,7 @@ Read [references/intake-and-icp.md](references/intake-and-icp.md) whenever colle
 
 Read [references/fast-mode.md](references/fast-mode.md) before research.
 
-- Use `fast_calibration` for the first 3–10 leads, repeated market tests, or when the user asks for speed. Reuse a confirmed brief, create a pool of about 1.5–2 times the target, run deterministic triage, deeply verify only the best survivors, and postpone formal workbook production until the final qualified set is accepted unless the user explicitly requests Excel earlier.
+- Use `fast_calibration` for the first 3–10 leads, repeated market tests, or when the user asks for speed. Reuse a confirmed brief, create a pool of about 3 times the target, run deterministic triage, deeply verify only the best survivors, and postpone formal workbook production until the final qualified set is accepted unless the user explicitly requests Excel earlier.
 - Use `full_research` for an approved larger batch. Keep the same staged funnel but expand the source mix and contact enrichment.
 - Record actual wall-clock time for discovery, triage, deep verification, contact enrichment, and delivery. Do not present an estimate as measured time.
 
@@ -121,7 +121,7 @@ Apply social recency and geography gates before scoring: default to 30 days for 
 
 Treat search snippets and list documents as discovery evidence only. Verify candidates on an official site or another authoritative source.
 
-For `fast_calibration`, start with at most three high-yield query families per search-task batch. Stop adding queries once the deduplicated candidate pool reaches roughly 1.5–2 times the requested count or marginal results are mostly duplicates/noise. During first-pass discovery save a lightweight JSON/CSV record containing only company name, candidate/official URL, country, buyer-type clue, source role, product/HS clue, dated activity clue, one visible contact clue, and discovery query. Do not collect full addresses, social links, named contacts, every contact channel, long evidence summaries, or workbook formatting until the candidate survives triage.
+For `fast_calibration`, start with at most three high-yield query families per search-task batch. Stop adding queries once the deduplicated candidate pool reaches roughly 3 times the requested count or marginal results are mostly duplicates/noise. During first-pass discovery save a lightweight JSON/CSV record containing only company name, candidate/official URL, country, buyer-type clue, source role, product/HS clue, dated activity clue, one visible contact clue, and discovery query. Do not collect full addresses, social links, named contacts, every contact channel, long evidence summaries, or workbook formatting until the candidate survives triage.
 
 ### 4. Research a calibration sample
 
@@ -166,7 +166,7 @@ Do not enrich contacts for candidates already excluded during triage. In fast mo
 
 ### 7. Scale with controls
 
-- Build a deduplicated candidate pool approximately 1.5–2 times the requested qualified count in fast mode; expand it only when survivor yield is insufficient.
+- Build a deduplicated candidate pool approximately 3 times the requested qualified count; expand it only when survivor yield is insufficient.
 - Cache already-read pages and deduplicate by normalized domain.
 - Limit pages per domain and stop repeated failed requests.
 - Preserve the query/source that discovered each company.

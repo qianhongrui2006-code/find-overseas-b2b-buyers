@@ -7,7 +7,7 @@ Use this mode for a first sample, a repeated country/industry test, or a user-re
 | Stage | Input | Action | Stop condition |
 |---|---|---|---|
 | Brief reuse | confirmed supplier profile | reuse product, buyer, exclusion, MOQ, and country rules | do not re-read unchanged supplier pages |
-| Parallel light discovery | country × buyer type × language task matrix | run independent cells concurrently when supported; capture only lightweight candidate fields | deduplicated pool reaches about 1.5–2× target or results become mostly duplicates |
+| Parallel light discovery | country × buyer type × language task matrix | run independent cells concurrently when supported; capture only lightweight candidate fields | deduplicated pool reaches about 3× target or results become mostly duplicates |
 | Deterministic triage | candidate JSON/CSV + prior domains | normalize after every batch, deduplicate, hard-exclude, quick-rank | retain only the best candidates needed to reach the target with a small buffer |
 | Core verification | ranked survivors | check product/purchase pathway, buyer identity, geography, and minimum contact | qualification is decided or two primary official pages plus one decisive fallback were checked |
 | Minimum contact | surviving candidates | collect one sourced published or verified email or phone | either channel found, or allowed contact sources exhausted and candidate excluded |
