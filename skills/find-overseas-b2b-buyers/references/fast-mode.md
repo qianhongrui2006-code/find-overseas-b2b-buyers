@@ -7,13 +7,28 @@ Use this mode for a first sample, a repeated country/industry test, or a user-re
 | Stage | Input | Action | Stop condition |
 |---|---|---|---|
 | Brief reuse | confirmed supplier profile | reuse product, buyer, exclusion, MOQ, and country rules | do not re-read unchanged supplier pages |
-| Light discovery | 2–3 query families | capture name, official/candidate URL, country, source role, product/HS clue, latest date, and visible contact clue only | pool reaches about 3× target or results become mostly duplicates |
-| Deterministic triage | candidate JSON + prior domains | normalize, deduplicate, hard-exclude, quick-rank | keep about 2× target for deep verification |
-| Deep verification | ranked survivors | check product, buyer identity, factory/group, demand/scale | qualification is decided or four useful official pages were checked |
+| Parallel light discovery | country × buyer type × language task matrix | run independent cells concurrently when supported; capture only lightweight candidate fields | deduplicated pool reaches about 1.5–2× target or results become mostly duplicates |
+| Deterministic triage | candidate JSON/CSV + prior domains | normalize after every batch, deduplicate, hard-exclude, quick-rank | retain only the best candidates needed to reach the target with a small buffer |
+| Core verification | ranked survivors | check product/purchase pathway, buyer identity, geography, and minimum contact | qualification is decided or two primary official pages plus one decisive fallback were checked |
 | Minimum contact | surviving candidates | collect one sourced published or verified email or phone | either channel found, or allowed contact sources exhausted and candidate excluded |
-| Delivery | accepted sample | reuse workbook template/builder and run compact QA | formulas, duplicates, evidence, and layout pass |
+| On-demand enrichment | finalists or unresolved high-value candidates | check social/news/recruitment/trade/contact-provider sources only when triggered | the specific intent, entity, scale, or outreach question is answered |
+| Late delivery | completed verified set | generate the workbook once from structured records and run compact QA | formulas, duplicates, evidence, and layout pass |
 
-Do not enrich all candidates. Use `DISCOVER_LIGHT → TRIAGE → VERIFY_DEEP → CONTACT_MINIMUM → DELIVER`. Collect address/maps, social/news links, named contacts, second contact channel, and detailed trade history only for survivors when they can change the decision or outreach route.
+Do not enrich all candidates. Use `DISCOVER_LIGHT → TRIAGE → VERIFY_CORE → CONTACT_MINIMUM → ENRICH_ON_DEMAND → DELIVER_ONCE`. Use websites, industry directories, and Maps/local profiles as the primary lanes. Collect social/news/recruitment links, named contacts, a second contact channel, and detailed trade history only for finalists when they can change the decision or outreach route.
+
+## Parallel search-task matrix
+
+Create one lightweight task per confirmed `country × priority buyer type × search language`. Add source-lane variants only for website/search, industry directory/association, and Maps/local profiles. Assign a small result quota to each cell and merge results by normalized domain after every batch.
+
+Run independent cells concurrently only when the host supports parallel requests within provider limits. Otherwise process one small batch from each cell in round-robin order. Never broaden beyond the confirmed countries merely to keep workers busy.
+
+## Lightweight checkpoints
+
+During discovery and triage, persist JSON or CSV rather than XLSX. Keep only:
+
+`company_name`, `candidate_url`, `official_domain`, `country`, `buyer_type_clue`, `source_role`, `product_clue`, `activity_date`, `contact_clue`, `discovery_query`, and `disposition`.
+
+Write verified survivor records and channel evidence separately. Do not append to or restyle a workbook after each company. Generate one final workbook only after the requested target is reached or the shortfall is finalized.
 
 ## Hard exclusions at triage
 
@@ -30,14 +45,13 @@ Do not treat a generic word such as `fabricant` as a hard exclusion by itself. C
 
 ## Page budget
 
-Default maximum per surviving domain:
+Default fast-mode maximum per surviving domain:
 
-1. Home or category page.
-2. Product/catalogue page.
-3. About/group/legal page.
-4. Contact page.
+1. Product/category or home page that establishes the purchase pathway.
+2. Contact page, or Maps/local profile when it already provides an authoritative phone/site.
+3. One About/group/legal page only when buyer identity, geography, or ownership remains decisive.
 
-Open another page only when it can decide buyer-versus-manufacturer identity, exclusive supply, or a high-value demand signal. Stop immediately after a decisive hard exclusion.
+Open another page or secondary channel only when it can decide buyer-versus-manufacturer identity, exclusive supply, entity matching, or a high-value demand signal. Stop immediately after a decisive hard exclusion or once the minimum evidence and contact gates pass.
 
 ## Timing record
 
@@ -48,5 +62,5 @@ Also record candidates discovered, duplicates skipped, triage exclusions, deeply
 ## Output depth
 
 - Default fast sample: concise preview table plus evidence URLs.
-- Create the formal workbook only when requested or after sample approval.
+- Create the formal workbook once, only after the final verified set is complete or the user explicitly requests an interim workbook.
 - Never sacrifice evidence, contact provenance, or buyer/manufacturer checks for speed.

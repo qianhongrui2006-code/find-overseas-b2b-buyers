@@ -2,6 +2,12 @@
 
 Use `assets/海外B2B客户名单模板.xlsx` or reproduce its four-sheet structure. Optimize the workbook for deciding whom to contact and why. Keep internal scoring, deduplication, and audit details outside this workbook.
 
+## Late workbook generation
+
+Treat XLSX as the final presentation artifact, not the working database. During discovery, triage, and verification, persist lightweight candidate JSON/CSV plus verified-lead and channel-evidence records. Do not open, append to, or restyle the workbook after each company.
+
+Generate the workbook once after the requested qualified set is complete or a documented shortfall is final. Populate all sheets in one pass, apply formatting once, and run one final QA pass. During calibration, show a concise Markdown/text preview unless the user explicitly requests an interim workbook.
+
 ## 潜在客户
 
 Required column order:

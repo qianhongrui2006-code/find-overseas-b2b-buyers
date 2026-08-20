@@ -57,7 +57,7 @@ Read [references/intake-and-icp.md](references/intake-and-icp.md) whenever colle
 
 Read [references/fast-mode.md](references/fast-mode.md) before research.
 
-- Use `fast_calibration` for the first 3–10 leads, repeated market tests, or when the user asks for speed. Reuse a confirmed brief, create a pool of about 3 times the target, run deterministic triage, deeply verify only the best survivors, and postpone formal workbook production until the sample is accepted unless the user explicitly requests Excel.
+- Use `fast_calibration` for the first 3–10 leads, repeated market tests, or when the user asks for speed. Reuse a confirmed brief, create a pool of about 1.5–2 times the target, run deterministic triage, deeply verify only the best survivors, and postpone formal workbook production until the final qualified set is accepted unless the user explicitly requests Excel earlier.
 - Use `full_research` for an approved larger batch. Keep the same staged funnel but expand the source mix and contact enrichment.
 - Record actual wall-clock time for discovery, triage, deep verification, contact enrichment, and delivery. Do not present an estimate as measured time.
 
@@ -101,16 +101,15 @@ Do not enter prospect discovery, including a calibration sample, until the user 
 
 Read [references/search-playbook.md](references/search-playbook.md). Build English and local-language term groups for products, buyer identities, demand signals, geography, and exclusions. Use several complementary queries rather than one oversized query.
 
-Prefer sources in this order when appropriate:
+Build a search-task matrix across confirmed countries, priority buyer types, and relevant languages. Execute independent cells concurrently when the host supports safe parallel search; otherwise rotate through cells in small batches so one country or buyer type cannot consume the full search budget. Deduplicate normalized domains after every batch.
 
-1. Company websites and product/catalogue pages.
-2. Search APIs or user-visible web search for discovery.
-3. Google Places/Maps or local business directories.
-4. Trade associations and exhibitor/member lists.
-5. Competitor stockists, dealers, and retailer networks.
-6. Official company social pages and LinkedIn for company/contact enrichment.
-7. Public commercial information platforms and permitted directories for discovery or corroboration.
-8. Licensed/user-authorized trade, shipment, or contact databases when available.
+Use the following source tiers rather than checking every channel for every candidate:
+
+1. **Primary discovery and verification:** search APIs or user-visible web search, company websites/product catalogues, industry directories/associations, and Maps/Places or authoritative local business profiles.
+2. **Secondary discovery:** competitor stockists, exhibitor/member lists, retailer networks, and public commercial platforms when the primary pool is insufficient or a buyer role needs corroboration.
+3. **On-demand enrichment only:** official social pages, news, recruitment, licensed trade/shipment data, and contact providers. Check these only for finalists, unresolved high-value candidates, an explicit-intent request, or a material qualification question.
+
+Mark secondary channels that were not triggered as `not_checked`; do not spend time checking them merely to fill the channel-evidence sheet.
 
 Read [references/commercial-data-platforms.md](references/commercial-data-platforms.md) before using company aggregators, freight/logistics directories, customs records, bills of lading, or user-exported platform data. Record the entity role shown by the source and resolve the candidate to an operating company and official domain before qualification. Never bypass login, CAPTCHA, export, subscription, or API controls; ask the user to provide an authorized export or access route when needed.
 
@@ -122,7 +121,7 @@ Apply social recency and geography gates before scoring: default to 30 days for 
 
 Treat search snippets and list documents as discovery evidence only. Verify candidates on an official site or another authoritative source.
 
-For `fast_calibration`, start with at most three high-yield query families. Stop adding queries once the candidate pool reaches roughly 3 times the requested count or marginal results are mostly duplicates/noise. During first-pass discovery collect only company name, candidate/official URL, country, source role, product/HS clue, dated activity clue, and one contact clue if already visible. Do not collect full addresses, social links, named contacts, every contact channel, or long evidence summaries until the candidate survives triage.
+For `fast_calibration`, start with at most three high-yield query families per search-task batch. Stop adding queries once the deduplicated candidate pool reaches roughly 1.5–2 times the requested count or marginal results are mostly duplicates/noise. During first-pass discovery save a lightweight JSON/CSV record containing only company name, candidate/official URL, country, buyer-type clue, source role, product/HS clue, dated activity clue, one visible contact clue, and discovery query. Do not collect full addresses, social links, named contacts, every contact channel, long evidence summaries, or workbook formatting until the candidate survives triage.
 
 ### 4. Research a calibration sample
 
@@ -167,16 +166,19 @@ Do not enrich contacts for candidates already excluded during triage. In fast mo
 
 ### 7. Scale with controls
 
-- Build a candidate pool approximately 2–5 times the requested qualified count.
+- Build a deduplicated candidate pool approximately 1.5–2 times the requested qualified count in fast mode; expand it only when survivor yield is insufficient.
 - Cache already-read pages and deduplicate by normalized domain.
 - Limit pages per domain and stop repeated failed requests.
 - Preserve the query/source that discovered each company.
 - Report blocked sources, inaccessible pages, and coverage gaps.
 - Persist normalized domains, disposition, decisive evidence URL, and last-checked date in the run output so later batches can skip unchanged companies.
+- Persist lightweight candidate records after each discovery batch, then write verified survivor records separately. Do not build or repeatedly update an XLSX during discovery, triage, or per-company verification.
 
 ### 8. Deliver the workbook
 
 Read [references/output-schema.md](references/output-schema.md). Use `assets/海外B2B客户名单模板.xlsx` when available, or create an equivalent workbook with the spreadsheet tooling available in the environment.
+
+Generate the workbook once, after the target set is complete or an honest shortfall has been decided. Build it from the final verified structured records and channel records, then run one formatting and QA pass. Use a concise text/Markdown preview during calibration instead of creating disposable interim workbooks unless the user explicitly requests one.
 
 Save all task outputs under the confirmed output root. Never save generated customer data inside the installed Skill directory. If the confirmed path is outside the active workspace, request the host platform's normal file permission rather than silently changing destinations. Create only task-relevant subfolders beneath the confirmed root. If writing fails, report the exact path and ask whether to grant access or choose a new location; do not continue with an undisclosed fallback.
 

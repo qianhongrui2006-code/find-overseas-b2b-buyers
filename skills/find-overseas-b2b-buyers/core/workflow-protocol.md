@@ -13,7 +13,7 @@ This file is the canonical orchestration contract. A platform adapter may change
 | `AWAIT_CONFIRMATION` | Obtain explicit approval for the company understanding, current-run screening brief, and output destination | approval or requested edits | `SAMPLE` or `BRIEF` |
 | `SAMPLE` | Research 3–10 candidates and apply evidence rules | sample batch | `AWAIT_SAMPLE_FEEDBACK` |
 | `AWAIT_SAMPLE_FEEDBACK` | Calibrate buyer types and qualification thresholds | approval or corrections | `SCALE` or `BRIEF` |
-| `SCALE` | Expand the candidate pool with limits, cache, and deduplication | researched candidates | `QUALIFY` |
+| `SCALE` | Expand a parallel search-task matrix with limits, cache, and batch deduplication | lightweight researched candidates | `QUALIFY` |
 | `QUALIFY` | Apply hard exclusions, internal scoring, and contact status | qualified/review/excluded groups | `QA` |
 | `QA` | Validate schemas, evidence, duplicates, contacts, formulas, and counts | QA report | `DELIVER` |
 | `DELIVER` | Produce workbook and concise batch summary | XLSX plus batch object | terminal |
@@ -77,10 +77,11 @@ Retry transient reads within host limits. Stop repeated failures. Do not bypass 
 
 Within `SAMPLE` and `SCALE`, use this sub-funnel:
 
-1. `DISCOVER_LIGHT`: collect only company name, official/candidate URL, country, source role, product/HS clue, latest relevant date, visible contact clue, discovery query, and known-domain match. Do not enrich contacts, addresses, social links, or long evidence.
+1. `DISCOVER_LIGHT`: build a confirmed-country × priority-buyer-type × language task matrix. Run independent cells concurrently when supported, otherwise round-robin them in small batches. Start with official-site web search, industry directories/associations, and Maps/local profiles. Collect only company name, official/candidate URL, country, buyer-type clue, source role, product/HS clue, latest relevant date, visible contact clue, discovery query, and known-domain match. Persist lightweight JSON/CSV; do not enrich contacts, addresses, social links, or long evidence.
 2. `TRIAGE`: normalize domains, remove prior/duplicate domains, apply hard exclusions, and rank survivors with `scripts/triage_candidates.py`.
-3. `VERIFY_DEEP`: open only high-ranked survivors. Default to Home/Product, About/Group, Legal, and Contact pages; stop when qualification is already decided.
+3. `VERIFY_CORE`: open only high-ranked survivors. Default to one product/category page plus one contact page or authoritative Maps/local profile. Open one About/group/legal page only when identity, ownership, or geography remains decisive; stop when qualification is already decided.
 4. `CONTACT_MINIMUM`: collect one sourced published or verified email or phone for surviving companies. Stop when either is found. Exclude candidates when both remain absent after allowed sources are exhausted. Contact forms may be reported as supplementary routes but do not pass the gate. Named-person enrichment and a second contact channel are optional and come later.
-5. `DELIVER`: reuse a tested template/builder and record measured stage durations. Show only owner-facing sales fields in the workbook; keep lead IDs, scores, normalized domains, queries, and exclusion logs in structured internal data.
+5. `ENRICH_ON_DEMAND`: use social, news, recruitment, licensed trade/shipment data, and contact providers only for finalists, unresolved material questions, explicit-intent research, or user-requested depth. Record untriggered planned channels as `not_checked`.
+6. `DELIVER_ONCE`: after the target set or honest shortfall is finalized, generate one workbook from verified structured records, apply formatting once, and run one QA pass. Show only owner-facing sales fields; keep lead IDs, scores, normalized domains, queries, and exclusion logs in structured internal data.
 
-For calibration, stop discovery near three times the requested lead count. If fewer candidates survive, run one additional query family before lowering any threshold. Cache normalized domains and decisive evidence so subsequent runs do not repeat unchanged work.
+For calibration, stop discovery near 1.5–2 times the requested lead count. If fewer candidates survive, expand the best-yield matrix cells or run one additional query family before lowering any threshold. Cache normalized domains and decisive evidence so subsequent runs do not repeat unchanged work.
