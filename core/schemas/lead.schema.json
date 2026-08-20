@@ -13,6 +13,7 @@
     "country": {"type": "string"},
     "city": {"type": ["string", "null"]},
     "address": {"type": ["string", "null"]},
+    "maps_or_local_profile_url": {"type": ["string", "null"], "format": "uri"},
     "company_type": {"type": "string"},
     "product_match": {"enum": ["high", "medium", "low", "unverified"]},
     "product_relationship": {"enum": ["exact_target", "direct_use", "adjacent_with_transaction_bridge", "adjacent_only", "unrelated", "unknown"]},
@@ -25,6 +26,9 @@
     "intent_evidence": {"type": "array", "items": {"type": "string"}},
     "intent_evidence_date": {"type": ["string", "null"], "format": "date"},
     "intent_evidence_url": {"type": ["string", "null"], "format": "uri"},
+    "explicit_purchase_intent": {"enum": ["explicit", "not_found", "unclear"]},
+    "explicit_intent_summary": {"type": ["string", "null"]},
+    "source_checks": {"type": "array", "items": {"$ref": "#/$defs/source_check"}},
     "scale_signals": {"type": "array", "items": {"type": "string"}},
     "evidence_confidence": {"enum": ["high", "medium", "low"]},
     "identity_status": {"enum": ["confirmed", "probable", "unverified", "conflict"]},
@@ -46,6 +50,32 @@
     "notes": {"type": ["string", "null"]}
   },
   "$defs": {
+    "source_check": {
+      "type": "object",
+      "required": ["channel", "check_status", "retrieved_at"],
+      "properties": {
+        "channel": {"enum": ["official_site_catalogue", "maps_local_profile", "official_social", "official_news", "recruitment", "trade_show", "industry_association", "authorized_trade_data", "government_registry", "other_authoritative"]},
+        "check_status": {"enum": ["found", "checked_no_result", "blocked", "unavailable", "not_checked"]},
+        "concise_finding": {"type": ["string", "null"]},
+        "url": {"type": ["string", "null"], "format": "uri"},
+        "source_date": {"type": ["string", "null"], "format": "date"},
+        "retrieved_at": {"type": "string", "format": "date-time"},
+        "intent_signal": {"enum": ["explicit", "indirect", "none", "unclear"]},
+        "intent_target_or_request": {"type": ["string", "null"]},
+        "notes": {"type": ["string", "null"]}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"check_status": {"const": "found"}}, "required": ["check_status"]},
+          "then": {"required": ["concise_finding", "url"], "properties": {"concise_finding": {"type": "string", "minLength": 1}, "url": {"type": "string", "format": "uri"}}}
+        },
+        {
+          "if": {"properties": {"intent_signal": {"const": "explicit"}}, "required": ["intent_signal"]},
+          "then": {"required": ["url", "source_date", "intent_target_or_request"], "properties": {"url": {"type": "string", "format": "uri"}, "source_date": {"type": "string", "format": "date"}, "intent_target_or_request": {"type": "string", "minLength": 1}}}
+        }
+      ],
+      "additionalProperties": false
+    },
     "contact": {
       "type": "object",
       "required": ["channel", "value", "status", "source_url", "retrieved_at"],
@@ -67,13 +97,28 @@
         "required": ["qualification_status"]
       },
       "then": {
-        "required": ["product_relationship", "target_product_purchase_pathway", "target_product_evidence_url", "evidence_confidence", "investment_action"],
+        "required": ["product_relationship", "target_product_purchase_pathway", "target_product_evidence_url", "evidence_confidence", "investment_action", "explicit_purchase_intent", "source_checks"],
         "properties": {
           "product_relationship": {"enum": ["exact_target", "direct_use", "adjacent_with_transaction_bridge"]},
           "target_product_purchase_pathway": {"type": "string", "minLength": 1},
           "target_product_evidence_url": {"type": "string", "format": "uri"},
           "evidence_confidence": {"enum": ["high", "medium"]},
-          "investment_action": {"enum": ["contact_now", "low_cost_test"]}
+          "investment_action": {"enum": ["contact_now", "low_cost_test"]},
+          "source_checks": {"type": "array", "minItems": 1}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"explicit_purchase_intent": {"const": "explicit"}},
+        "required": ["explicit_purchase_intent"]
+      },
+      "then": {
+        "required": ["explicit_intent_summary", "intent_evidence_date", "intent_evidence_url"],
+        "properties": {
+          "explicit_intent_summary": {"type": "string", "minLength": 1},
+          "intent_evidence_date": {"type": "string", "format": "date"},
+          "intent_evidence_url": {"type": "string", "format": "uri"}
         }
       }
     }

@@ -122,6 +122,8 @@ For `fast_calibration`, start with at most three high-yield query families. Stop
 - Normalize the official domain and merge duplicate results.
 - Check Home, About, Products/Catalogue, Brands, Industries, Locations, Contact, News, and relevant supplier/trade pages.
 - Determine company role, product relevance, market relevance, scale fit, demand signals, and contactability.
+- For every source channel planned for the run, record one of `found`, `checked_no_result`, `blocked`, `unavailable`, or `not_checked`. Never leave the user guessing whether a channel was checked.
+- Store channel results as concise audit facts: Maps/local profile keeps the verified address and source URL; official social, news, recruitment, trade-show/association, and authorized trade-data checks keep the relevant URL plus at most one sentence of useful information. Preserve multiple URLs as separate channel records rather than merging them into an unverifiable paragraph.
 - Verify the candidate's relationship to the deliverable defined in the current brief. Record a target-product evidence URL and distinguish an evidenced purchase pathway from a speculative cross-sell opportunity.
 - Place ambiguous companies in `待人工复核`; do not force them into the qualified list.
 - Show the sample and ask for directional feedback before completing a larger batch.
@@ -135,6 +137,8 @@ Read [references/qualification-and-evidence.md](references/qualification-and-evi
 After the contact and product-relationship gates pass, use a factory-buyer 100-point score: direct procurement capability 25, product/commercial fit 20, purchasing scale and MOQ fit 20, current demand/timing 15, supplier openness/switchability 10, and target-market delivery/compliance fit 10. Do not award points merely because both email and phone are present. Treat contact quality as an outreach-routing note and tie-breaker only.
 
 Assign `evidence_confidence` independently as `high`, `medium`, or `low`, and record an `investment_action`. A high commercial score cannot compensate for low-confidence evidence. Only `high` or `medium` confidence may enter the qualified list; use `manual_review` or exclusion for unresolved material conflicts. Government registration can confirm identity but never adds commercial-score points.
+
+Assign `explicit_purchase_intent` independently as `explicit`, `not_found`, or `unclear`. Use `explicit` only when a dated public source clearly requests the target product, a supplier, quotation, tender response, procurement partner, or equivalent transaction. A product catalogue, association membership, exhibitor listing, recruitment post, import record, or company expansion is not explicit purchase intent by itself. When `explicit`, save the exact source URL, source date, target product, and a short paraphrase; never rely on a search snippet alone.
 
 Use `scripts/lead_pipeline.py` for deterministic normalization, duplicate detection, weighted scoring, and schema checks when preparing or auditing structured lead JSON/CSV. Run `python scripts/lead_pipeline.py --help` for usage.
 
@@ -173,8 +177,11 @@ Deliver these sheets:
 3. `排除记录`
 4. `搜索策略`
 5. `任务说明`
+6. `渠道验证`
 
 In both lead sheets, put the decision-maker's most actionable fields first: company official name, reference/translated name, website, phone, email, WhatsApp, contact form or contact-source URL, contact person, role, and contact status. Put scoring fields and research evidence after this front contact block.
+
+In the main lead sheets, show the verified address, Maps/local-profile URL, explicit-purchase-intent label, intent evidence URL, and a compact channel-coverage summary. In `渠道验证`, use one row per company and source URL with the channel, check status, concise finding, source URL, source date, retrieval date, and explicit-intent label. Include rows for checked channels with no result or blocked access so absence is visible rather than silently omitted.
 
 Verify formulas, filters, URLs, dates, categorical fields, duplicate domains, evidence completeness, and visible layout before delivery. Include a concise batch summary: researched count, qualified count, A/B/C distribution, contact coverage, main exclusions, limitations, and recommended next iteration.
 

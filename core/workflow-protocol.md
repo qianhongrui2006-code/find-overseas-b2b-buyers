@@ -29,7 +29,8 @@ This file is the canonical orchestration contract. A platform adapter may change
 6. Do not mark current purchase intent unless a dated source explicitly supports it.
 7. Keep commercial score separate from evidence confidence. A `low`-confidence candidate cannot enter `qualified` regardless of score; unresolved material identity, product-pathway, geography, or contact conflicts require review or exclusion.
 8. Treat government registration as optional identity evidence only. Do not bulk-enumerate registries by default, do not add commercial points for registration, and stop at login, CAPTCHA, paywall, `429`, or access denial.
-9. Do not enter `DELIVER` until QA reports no blocking schema, evidence, or duplicate errors.
+9. For every source channel planned in the confirmed brief, record `found`, `checked_no_result`, `blocked`, `unavailable`, or `not_checked`, plus concise findings and URLs where available. Mark explicit purchase intent only from a dated source that directly requests the target product, supplier, quotation, tender response, or procurement partner.
+10. Do not enter `DELIVER` until QA reports no blocking schema, evidence, channel-disclosure, or duplicate errors.
 
 ## Source labels
 

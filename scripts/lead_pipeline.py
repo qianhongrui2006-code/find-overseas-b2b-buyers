@@ -111,6 +111,21 @@ def validate(record: dict) -> list[str]:
         investment_action = str(record.get("investment_action", "")).strip()
         if investment_action not in {"contact_now", "low_cost_test"}:
             issues.append("invalid:qualified_investment_action")
+        explicit_intent = str(record.get("explicit_purchase_intent", "")).strip()
+        if explicit_intent not in {"explicit", "not_found", "unclear"}:
+            issues.append("invalid:explicit_purchase_intent")
+        source_checks = record.get("source_checks") or []
+        if not source_checks:
+            issues.append("missing:source_checks")
+        if explicit_intent == "explicit":
+            if not str(record.get("intent_evidence_url", "")).strip():
+                issues.append("missing:explicit_intent_evidence_url")
+            if not str(record.get("intent_evidence_date", "")).strip():
+                issues.append("missing:explicit_intent_evidence_date")
+            if not str(record.get("explicit_intent_summary", "")).strip():
+                issues.append("missing:explicit_intent_summary")
+            if not any(item.get("intent_signal") == "explicit" and item.get("url") for item in source_checks):
+                issues.append("missing:explicit_intent_source_check")
         components = record.get("score_components") or {}
         procurement = clamp_score(components.get("direct_procurement_capability", 0), 25)
         product_fit = clamp_score(components.get("product_commercial_fit", 0), 20)

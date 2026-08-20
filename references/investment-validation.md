@@ -51,6 +51,18 @@ Retain a source URL and retrieval date for company identity, geography, buyer ro
 
 Record unresolved conflicts and lower confidence instead of silently selecting the preferred source.
 
+## Channel-check disclosure
+
+For each source channel planned in the confirmed brief, disclose whether it was `found`, `checked_no_result`, `blocked`, `unavailable`, or `not_checked`. A blank field is not proof that a channel was checked. Store each useful URL separately with a concise finding and retrieval date.
+
+- Website/catalogue: record the decisive product, buyer-role, location, or contact URL.
+- Maps/local business profile: record the corroborated street address and the exact map/profile URL.
+- Official social/news/recruitment: record the relevant page or post URL; summarize only the business implication.
+- Trade show/association: record the exhibitor/member/profile URL and what it verifies, not an assumed buying need.
+- Authorized trade data: record the provider/source URL or dataset reference and entity/product-matching limitations.
+
+Mark purchase intent `explicit` only for a dated public request for the target product, supplier, quotation, tender response, procurement partner, or equivalent transaction. Otherwise use `not_found` or `unclear`. Do not treat a catalogue, hiring post, show attendance, association membership, company growth, or import history as an explicit buying request.
+
 ## Sales-investment action
 
 Use these actions independently of score:
