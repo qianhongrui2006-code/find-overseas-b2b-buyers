@@ -11,8 +11,8 @@ This file is the canonical orchestration contract. A platform adapter may change
 | `CLARIFY` | Ask at most one concise round of high-impact questions | updated intake/profile | `BRIEF` |
 | `BRIEF` | Define targets, hard rules, signals, exclusions, contacts, sources, count, and output destination | search-brief object | `AWAIT_CONFIRMATION` |
 | `AWAIT_CONFIRMATION` | Obtain explicit approval for the company understanding, current-run screening brief, and output destination | approval or requested edits | `SAMPLE` or `BRIEF` |
-| `SAMPLE` | Research 3–10 candidates and apply evidence rules | sample batch | `AWAIT_SAMPLE_FEEDBACK` |
-| `AWAIT_SAMPLE_FEEDBACK` | Calibrate buyer types and qualification thresholds | approval or corrections | `SCALE` or `BRIEF` |
+| `SAMPLE` | Research 3–10 candidates and apply evidence rules | sample batch plus sample-mix summary | `AWAIT_SAMPLE_FEEDBACK` |
+| `AWAIT_SAMPLE_FEEDBACK` | Help a non-expert user validate execution with observed, optional adjustment prompts | approval or explicit corrections | `SCALE` or `BRIEF` |
 | `SCALE` | Expand a parallel search-task matrix with limits, cache, and batch deduplication | lightweight researched candidates | `QUALIFY` |
 | `QUALIFY` | Apply hard exclusions, internal scoring, and contact status | qualified/review/excluded groups | `QA` |
 | `QA` | Validate schemas, evidence, duplicates, contacts, formulas, and counts | QA report | `DELIVER` |
@@ -33,6 +33,7 @@ This file is the canonical orchestration contract. A platform adapter may change
 10. Never write generated customer data into the installed Skill directory. Save all deliverables below the confirmed output root; request normal host permission for paths outside the workspace and never silently substitute another directory.
 11. Do not enter `DELIVER` until QA reports no blocking schema, evidence, channel-disclosure, destination, or duplicate errors.
 12. For commercial/shipment/logistics platforms, identify the record role before qualification. Do not treat forwarders, brokers, NVOCCs/carriers, notify parties, or care-of addresses as product buyers without separate official evidence.
+13. At `AWAIT_SAMPLE_FEEDBACK`, do not ask for an unguided yes/no judgment. Summarize the observed sample mix and provide 3–6 relevant adjustment choices with business consequences and copyable reply examples. Always offer an unchanged continuation. Suggestions never authorize automatic changes or weaker hard gates; apply only explicit user feedback, and return material changes to `BRIEF` for reconfirmation.
 
 ## Source labels
 

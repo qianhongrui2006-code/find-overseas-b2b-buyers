@@ -62,5 +62,8 @@ Also record candidates discovered, duplicates skipped, triage exclusions, deeply
 ## Output depth
 
 - Default fast sample: concise preview table plus evidence URLs.
+- Follow the table with a compact sample-mix summary and 3–6 observed, actionable calibration choices. For each choice state what appeared, why changing it would affect lead quality or outreach, and one reply the user can copy. Prefer dimensions such as buyer type, product/purchase pathway, order-scale fit, geography allocation, contact route/role, and optional intent-research depth.
+- Put `方向正确，按当前标准继续` first. Do not require the user to understand internal scoring, and do not show numeric scores unless requested.
+- Treat all suggestions as optional. Do not lower hard evidence/contact/product/geography gates or change weights automatically. Material user-requested changes return to the brief confirmation step; accepted sample leads count toward the final target.
 - Create the formal workbook once, only after the final verified set is complete or the user explicitly requests an interim workbook.
 - Never sacrifice evidence, contact provenance, or buyer/manufacturer checks for speed.
